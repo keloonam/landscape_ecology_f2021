@@ -1,0 +1,95 @@
+---
+title: "FES 542 Lab 1"
+author: "Kenneth Loonam"
+date: "10/1/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F)
+require(tidyverse)
+```
+
+## 1
+
+```{r}
+q_1_data <- tibble(
+  meters = c((0:10)*10),
+  ins_a = c(40,30,40,25,10,10,15,20,15,35,25),
+  ins_b = c(2,3,0,4,29,22,18,8,10,1,2)
+)
+
+lm_fine <- with(q_1_data, lm(ins_b ~ ins_a))
+
+ggplot(data = q_1_data, aes(x = ins_a, y = ins_b)) +
+  geom_point() +
+  theme_classic() +
+  labs(x = "Insect A", y = "Insect B", title = "Correlation of Insect Abundance at Fine Scale") + 
+  geom_abline(slope = -0.7575, intercept = 27.2491)
+```
+
+## 2
+
+```{r}
+summary(lm_fine)
+```
+
+
+## 3
+
+```{r}
+q_3_data <- tibble(
+  meters = c((0:10) * 2000),
+  ins_a = c(8000,4800,2000,6000,0,400,400,10800,4000,2000,8000),
+  ins_b = c(16000,8000,400,12000,400,400,3200,16000,6000,3600,8800)
+)
+
+lm_broad <- with(q_3_data, lm(ins_b ~ ins_a))
+
+ggplot(data = q_3_data, aes(x = ins_a, y = ins_b)) +
+  geom_point() +
+  theme_classic() +
+  labs(x = "Insect A", y = "Insect B", 
+       title = "Correlation of Insect Abundance at Broad Scale") + 
+  geom_abline(slope = 1.508, intercept = 437.475)
+
+summary(lm_broad)
+```
+
+## 4
+
+At fine scales, insects A and B are negatively correlated, however, at broad 
+scales (e.g. larger extent and grain), insects A and B are positively 
+correlated. The negative correlation at fine scales supports two hypotheses: 
+that insects A and B compete or that insects A and B select for different 
+habitats or resources at fine scales. The positive correlation at broad scales 
+also supports multiple hypotheses. A and B could utilize similar habitats at 
+broad scales. They could also be mutualists, which is unlikely given the fine 
+scale observations. The observations at both scales suggest that A and B either 
+compete but use similar habitat or that they select habitat similarly at broad 
+scales but not at fine scales.
+
+## 5
+
+The mechanisms driving abundance of the two species might be different at broad
+and find scales (as detailed in the hypotheses in part 4). It's also plausible 
+that the relationships are spurious, particularly the fine scale observations. 
+Measuring abundances in 100 sq cm plots over and extent of 100 m could be
+subject to extreme variance. If a similar survey were repeated along different
+transects, it would lead to more certainty.
+
+## 6
+
+The grain (0.1 to 10 sq m) and the extent (100 to 20000 m) vary between surveys.
+
+## 7
+
+In Starkey, the large mammals are hypothesized to have multiple relationships.
+Elk and mule deer could select for similar habitats or competitively exclude each
+other. Similarly, coyotes could use different habitat than cougars, actively
+avoid cougars, or seek out cougar kills to scavenge. Understanding the scale 
+that these behaviors happen at is critical to teasing out the relationships. If 
+mule deer select for similar habitat as elk, there might be a lot of overlap at 
+the home range scale. However, they could still avoid elk within their home 
+range, leading to different results when mule deer and elk abundance are
+measured at different scales.
