@@ -1,0 +1,44 @@
+---
+title: "Lab 3 - Landscape Metrics"
+author: "Kenneth Loonam"
+date: "11/1/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+# require(tidyverse)
+early_data <- data.frame(
+  fr = 59,
+  ag = 28,
+  ur = 13
+)
+post_data <- data.frame(
+  fr = 39,
+  ag = 32,
+  ur = 29
+)
+
+transform_pi <- function(x){
+  out <- x * log(x)
+  return(out)
+} 
+
+rslt_1 <- data.frame(
+  'Period' = c("Early-Settlement", "Postsettlement"),
+  'pi Forrested' = c(early_data$fr[1] / 100, post_data$fr[1] / 100),
+  'pi Agricultural' = c(early_data$ag[1] / 100, post_data$ag[1] / 100),
+  'pi Urban' = c(early_data$ur[1] / 100, post_data$ur[1] / 100),
+  'Dominance' = c((log(3) + sum(transform_pi(c(.59, .28, .13))) / log(3)), 
+                  (log(3) + sum(transform_pi(c(.39, .32, .29))) / log(3))),
+  'Shannon evenness' = c((-sum(transform_pi(c(.59, .28, .13))) / log(3)),
+                         -sum(transform_pi(c(.39, .32, .29))) / log(3)))
+
+knitr::kable(rslt_1)
+
+
+
+```
