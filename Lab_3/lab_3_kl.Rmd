@@ -6,17 +6,19 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = F, message = F)
 ```
+
+**1)**
 
 ```{r}
 # require(tidyverse)
-early_data <- data.frame(
+early_data <- tibble::tibble(
   fr = 59,
   ag = 28,
   ur = 13
 )
-post_data <- data.frame(
+post_data <- tibble::tibble(
   fr = 39,
   ag = 32,
   ur = 29
@@ -27,7 +29,7 @@ transform_pi <- function(x){
   return(out)
 } 
 
-rslt_1 <- data.frame(
+rslt_1 <- tibble::tibble(
   'Period' = c("Early-Settlement", "Postsettlement"),
   'pi Forrested' = c(early_data$fr[1] / 100, post_data$fr[1] / 100),
   'pi Agricultural' = c(early_data$ag[1] / 100, post_data$ag[1] / 100),
@@ -41,4 +43,62 @@ knitr::kable(rslt_1)
 
 
 
+```
+
+*a.* Urban cells become more frequent, with many of the new cells near previously existing urban cells. There is also a slight increase in agricultural cells, and a large decrease in the proportion of the landscape that is forested.
+
+*b.* Dominance and Shannon evenness both describe the composition of landscape types with their scales inverted. Dominance will be high (closer to one) if the landscape is dominated by a single type, while Shannon evenness will be high if the landscape has a roughly equivalent amount of each cover type.
+
+*c.* Personally, I would not report both; I am a fan of concise results. If the number of cover types is given, dominance and Shannon evenness can be derived from each other, making reporting both technically redundant. However, I can see a case reporting both if readers might be used to seeing and intuitively understanding one or the other.
+
+*d.* No, dividing by the natural log of *S* standardizes the measures between zero and one. That said, if the difference in S is large, landscapes with similar measures would still look markedly different.
+
+*e. S* = 1 functions as the lower bound (not inclusive). When *S* = 1, the natural log of *S* is zero, which breaks the formulas by attempting to divide by 0. There is no mathematical upper bound for the formulas, however, as *S* approaches infinity, the change in both metrics approaches 0 with each new cover type. Infinities are rarely encountered in ecology (without mathematical errors), but it does highlight that, with enough cover types, the information gained from each cover type is minimal. Functionally, I doubt most studies define enough cover types for that to matter.
+
+I just had a second thought on this. If *S* is equal to the number of cells on the landscape, you either have unobserved cover types or 1 cell of each cover type, making dominance 0 and SHEI 1. If you have more cover types than cells, the formula no longer makes much sense, and *S* would have to be more clearly defined as all named cover types or all cover types taking up at least one cell. If the prior definition is used, adding an arbitrary number of cover types will push dominance up and SHEI down, changing the description of the landscape and providing less relevant information.
+
+That's a long answer to a simple question, but I was having fun with it.
+
+*f.* Dominance and SHEI describe how homogeneous a landscape is or evenly represented landscape types are, but they do not describe the distribution of landscape types or include any information about which cover types are present or abundant.
+
+**2)**
+
+```{r}
+library (landscapemetrics)
+library(raster)
+library (psych)
+tile = raster(here::here("Data//lab_3//NLCD_OR_2011_.tif")) 
+# plot (tile)
+#Legend available here: https://www.mrlc.gov/data/legends/national-land-cover-database-2011-nlcd2011-legend
+
+
+#Data import
+
+#Import rasters that have been saved to your working directory.
+land1 = raster::raster(here::here("Data//lab_3//land1.tif"))
+land2 = raster::raster(here::here("Data//lab_3//land2.tif"))
+land3 = raster::raster(here::here("Data//lab_3//land3.tif"))
+land4 = raster::raster(here::here("Data//lab_3//land4.tif"))
+land5 = raster::raster(here::here("Data//lab_3//land5.tif"))
+land6 = raster::raster(here::here("Data//lab_3//land6.tif"))
+land7 = raster::raster(here::here("Data//lab_3//land7.tif"))
+land8 = raster::raster(here::here("Data//lab_3//land8.tif"))
+land9 = raster::raster(here::here("Data//lab_3//land9.tif"))
+land10 = raster::raster(here::here("Data//lab_3//land10.tif"))
+#All landscape .tiffs (e.g., "land1.tiff") need to be in your working directory
+
+#Panel figure with all 10 landscapes
+par(mfrow=c(5,2)) #sets up panel figure
+
+#Plot results
+land_1 = plot (land1)
+land_2 = plot (land2)
+land_3 = plot (land3)
+land_4 = plot (land4)
+land_5 = plot (land5)
+land_6 = plot (land6)
+land_7 = plot (land7)
+land_8 = plot (land8)
+land_9 = plot (land9)
+land_10 = plot (land10)
 ```
